@@ -7,6 +7,15 @@ class Student:
         self.courses_in_progress = []
         self.grades = {}
 
+    def rate_lecturer(self, lecturer, course, grade):
+        if isinstance(lecturer, Lecturer) and course in self.courses_in_progress and course in lecturer.courses_attached:
+            if course in lecturer.grades:
+                lecturer.grades[course] += [grade]
+            else:
+                lecturer.grades[course] = [grade]
+        else:
+            return 'Ошибка'
+
 class Mentor:
     def __init__(self, name, surname):
         self.name = name
@@ -18,15 +27,6 @@ class Lecturer(Mentor):
         super().__init__(name, surname)
         self.grades = {}
 
-    def receive_grade(self, student, course, grade):
-        if isinstance(student, Student) and course in self.courses_attached and course in student.courses_in_progress:
-            if course in self.grades:
-                self.grades[course] += [grade]
-            else:
-                self.grades[course] = [grade]
-        else:
-            return 'Ошибка'
-
 class Reviewer(Mentor):
     def rate_hw(self, student, course, grade):
         if isinstance(student, Student) and course in self.courses_attached and course in student.courses_in_progress:
@@ -37,6 +37,7 @@ class Reviewer(Mentor):
         else:
             return 'Ошибка'
 
+# Пример использования классов
 best_student = Student('Ruoy', 'Eman', 'your_gender')
 best_student.courses_in_progress += ['Python']
 
@@ -52,7 +53,7 @@ print(best_student.grades)
 cool_lecturer = Lecturer('Cool', 'Lecturer')
 cool_lecturer.courses_attached += ['Python']
 
-cool_lecturer.receive_grade(best_student, 'Python', 9)
-cool_lecturer.receive_grade(best_student, 'Python', 8)
+best_student.rate_lecturer(cool_lecturer, 'Python', 9)
+best_student.rate_lecturer(cool_lecturer, 'Python', 8)
 
 print(cool_lecturer.grades)
