@@ -72,36 +72,71 @@ class Reviewer(Mentor):
         else:
             return 'Ошибка'
 
+# Функции для подсчета средней оценки
+def average_student_grade(students, course):
+    total_grades = []
+    for student in students:
+        if course in student.grades:
+            total_grades.extend(student.grades[course])
+    return sum(total_grades) / len(total_grades) if total_grades else 0
 
-best_student = Student('Ruoy', 'Eman', 'your_gender')
-best_student.courses_in_progress += ['Python']
-best_student.finished_courses += ['Введение в программирование']
+def average_lecturer_grade(lecturers, course):
+    total_grades = []
+    for lecturer in lecturers:
+        if course in lecturer.grades:
+            total_grades.extend(lecturer.grades[course])
+    return sum(total_grades) / len(total_grades) if total_grades else 0
 
-cool_reviewer = Reviewer('Some', 'Buddy')
-cool_reviewer.courses_attached += ['Python']
 
-cool_reviewer.rate_hw(best_student, 'Python', 10)
-cool_reviewer.rate_hw(best_student, 'Python', 9)
-cool_reviewer.rate_hw(best_student, 'Python', 10)
+students = [
+    Student('Ruoy', 'Eman', 'your_gender'),
+    Student('John', 'Doe', 'male')
+]
 
-cool_lecturer = Lecturer('Cool', 'Lecturer')
-cool_lecturer.courses_attached += ['Python']
+students[0].courses_in_progress += ['Python']
+students[0].finished_courses += ['Введение в программирование']
 
-best_student.rate_lecturer(cool_lecturer, 'Python', 10)
-best_student.rate_lecturer(cool_lecturer, 'Python', 8)
+students[1].courses_in_progress += ['Python']
+students[1].finished_courses += ['Введение в программирование']
 
-print(best_student)
-print(cool_reviewer)
-print(cool_lecturer)
+reviewers = [
+    Reviewer('Some', 'Buddy'),
+    Reviewer('Another', 'Reviewer')
+]
 
-another_student = Student('John', 'Doe', 'male')
-another_student.courses_in_progress += ['Python']
-another_student.finished_courses += ['Введение в программирование']
-cool_reviewer.rate_hw(another_student, 'Python', 8)
-cool_reviewer.rate_hw(another_student, 'Python', 7)
-cool_reviewer.rate_hw(another_student, 'Python', 9)
+reviewers[0].courses_attached += ['Python']
+reviewers[1].courses_attached += ['Python']
 
-print(another_student)
+reviewers[0].rate_hw(students[0], 'Python', 10)
+reviewers[0].rate_hw(students[0], 'Python', 9)
+reviewers[0].rate_hw(students[0], 'Python', 10)
 
-print(best_student > another_student)
-print(best_student < another_student)
+reviewers[1].rate_hw(students[1], 'Python', 8)
+reviewers[1].rate_hw(students[1], 'Python', 7)
+reviewers[1].rate_hw(students[1], 'Python', 9)
+
+lecturers = [
+    Lecturer('Cool', 'Lecturer'),
+    Lecturer('Another', 'Lecturer')
+]
+
+lecturers[0].courses_attached += ['Python']
+lecturers[1].courses_attached += ['Python']
+
+students[0].rate_lecturer(lecturers[0], 'Python', 10)
+students[0].rate_lecturer(lecturers[0], 'Python', 8)
+
+students[1].rate_lecturer(lecturers[1], 'Python', 9)
+students[1].rate_lecturer(lecturers[1], 'Python', 7)
+
+# Вывод данных
+print(students[0])
+print(students[1])
+print(reviewers[0])
+print(reviewers[1])
+print(lecturers[0])
+print(lecturers[1])
+
+# Подсчет средней оценки
+print(f'Средняя оценка за домашние задания по всем студентам в рамках курса Python: {average_student_grade(students, "Python"):.1f}')
+print(f'Средняя оценка за лекции всех лекторов в рамках курса Python: {average_lecturer_grade(lecturers, "Python"):.1f}')
